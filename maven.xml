@@ -1,11 +1,119 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"   
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0   
-http://maven.apache.org/xsd/maven-4.0.0.xsd">  
-  
-  <modelVersion>4.0.0</modelVersion>  
-  <groupId>com.javatpoint.application1</groupId>  
-  <artifactId>my-app</artifactId>  
-  <version>1</version>  
-  
+<!-- This pom is now operational.-->
+<!--  ****Compile with****: mvn compile -->
+<!--  ****Create Executable with****: mvn package -->
+<!--  ****Run with****: java -jar MYPROJECT-0.0.1-beta-jar-with-dependencies.jar [args]-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- MYPROJECT INFO -->
+    <groupId>Main</groupId>
+    <artifactId>MyProject</artifactId>
+    <version>0.0.1-beta</version>
+    <name>MyProject</name>
+    <packaging>jar</packaging>
+    <!-- DEPENDANCIES -->
+    <dependencies>
+        <dependency>
+        <groupId>first</groupId>
+        <artifactId>first</artifactId>
+        <version>1.0.0</version>
+    </dependency>    
+        <dependency>
+          <groupId>second</groupId>
+          <artifactId>second</artifactId>
+          <version>1.0.0</version>
+    </dependency>   
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+    <!-- RESOURCES -->
+        <resources>
+          <resource>
+            <directory>src</directory>
+            <filtering>true</filtering>
+          </resource>
+          <resource>
+            <directory>${basedir}/images</directory>
+        <filtering>false</filtering>
+        <targetPath>images</targetPath>
+          </resource>
+        <resource>
+            <directory>${basedir}/resources</directory>
+        <filtering>false</filtering>
+        <targetPath>resources</targetPath>
+          </resource>
+        </resources>
+        <testResources>
+          <testResource>
+            <directory>src</directory>
+          </testResource>
+        </testResources>
+        <plugins>
+    <!--  For Java 6, you need to configure the maven-compiler-plugin. Add this to your pom.xml: -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>1.6</source>
+              <target>1.6</target>
+            </configuration>
+          </plugin>
+    <!-- CREATE EXECUTABLE JAR WITH DEPENDANCIES in target/MYPROJECT -->
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.4</version>
+          <configuration>
+            <archive>
+              <manifest>
+            <mainClass>Main.Main</mainClass>
+              </manifest>
+            </archive>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <outputDirectory>${project.build.directory}/MYPROJECT</outputDirectory> 
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id> <!-- this is used for inheritance merges -->
+              <phase>package</phase> <!-- bind to the packaging phase -->
+              <goals>
+            <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+    <!-- COPY RESOURCES to target/MYPROJECT -->
+        <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- here the phase you need -->
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/MYPROJECT</outputDirectory>
+              <resources>          
+                  <resource>
+                <directory>${basedir}/images</directory>
+                <filtering>false</filtering>
+                <targetPath>images</targetPath>
+                  </resource>
+                <resource>
+                <directory>${basedir}/resources</directory>
+                <filtering>false</filtering>
+                <targetPath>resources</targetPath>
+                  </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
+          </plugin>
+
+        </plugins>
+    </build>
 </project>
